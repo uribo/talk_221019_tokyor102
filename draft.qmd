@@ -1,0 +1,112 @@
+---
+title: "発表原稿"
+format: html
+echo: true
+eval: false
+---
+
+## 挨拶
+
+「textlintr、Rユーザのためのtextlintによる校正」という題で瓜生が発表します。
+よろしくお願いします。
+
+## textlint
+
+校正
+
+https://textlint.github.io
+
+## textlintr
+
+そんなtextlintをRから使えるようにパッケージ化したものが
+textlintrパッケージです。
+
+次のコマンドを実行してインストールを行います。
+
+```{r}
+install.packages("textlintr", repos = "https://uribo.r-universe.dev")
+```
+
+### textlintrでのtextlintの導入
+
+textlintrはrprojectの内部で利用することを前提としています。
+
+```{r}
+library(textlintr)
+```
+
+`init_textlintr()`関数でtextlintのインストールを行います。
+このとき、校正のルールを追加できます。
+ここでは技術文書向けのtextlintルールプリセット `textlint-rule-preset-ja-technical-writing` を導入する例を示します。
+
+```{r}
+init_textlintr(rules = "textlint-rule-preset-ja-technical-writing")
+#> ✔ textlint installed with scope "dev" 
+#> ✔ Installed dependencies 
+#> Yeah! Install was successful
+```
+
+この関数はtextlintの標準的な導入をRで行えるようにした関数です。
+上記のコマンドで次に示すnpmコマンドの実行します。
+
+```{js}
+npm install --save-dev textlint
+
+npm install --save-dev textlint-rule-preset-ja-technical-writing
+```
+
+`npm install`の実行により、`package.json`、`package-lock.json`の2つのファイル、
+`node_modules/`フォルダが作成されました。
+この中にインストールしたtextlintおよびルールの実行ファイルが含まれています。
+
+### textlintrの実行
+
+textlintの導入とあわせて技術文書向けのtextlintルールプリセットを入れたので
+すぐにtextlintによる校正を試すことができます。
+
+```{r}
+textlint(file = "draft.qmd")
+
+textlint(file = "quarto_startup.qmd")
+```
+
+RStudioマーカーパネルに表示されます。
+
+### ルールの確認・追加
+
+```{r}
+configure_lint_rules()
+
+is_rule_exist("common-misspellings")
+```
+
+ルールの追加
+
+```{r}
+add_rules(rules = "common-misspellings")
+```
+
+改めて確認
+
+```{r}
+configure_lint_rules()
+```
+
+```{r}
+textlint(file = "wrong.Rmd")
+```
+
+
+> 材料不足で代替素材で製品を作った。
+
+
+## textlintrを支えるパッケージ
+
+- rstudioapi
+- [packer](https://github.com/JohnCoene/packer)
+- processx
+- cli, crayon
+
+## 開発の参考としたパッケージ
+
+- lintr
