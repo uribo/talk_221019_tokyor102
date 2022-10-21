@@ -10,16 +10,51 @@ eval: false
 「textlintr、Rユーザのためのtextlintによる校正」という題で瓜生が発表します。
 よろしくお願いします。
 
+## 提供
+
+発表へ入る前に、本発表はご覧の方々からのGitHubスポンサー支援を受けていることをお伝えします。
+どうもありがとうございます。
+
+今日紹介するtextlintrのほかにも、多くのRパッケージやデータサイエンス関係の資料を作ったり、
+この発表のようにRに関する情報発信も行っています。
+一月あたり、およそ牛丼1杯分くらいからの支援を歓迎しています。
+関心のある方はぜひ[紹介文](https://github.com/sponsors/uribo)をご覧になってください。
+
+## 要約
+
+ここからが本題です。
+この発表はライトニングトークですので、さくっと内容をまとめておきます。
+
+- 文章校正ツールtextlintをRから利用するtextlintrパッケージを開発しました
+- node.js、npmの知識がほぼ不要でtextlint本体やルールの導入、文章のチェックが可能です
+- 文章の誤り、改善可能な箇所をRコンソールやRStudioのマーカーパネル上で確認できます
+- R Markdown、Quartoのファイル形式(`.rmd`, `.qmd`)に対応します
+
+では具体的な説明に移ります。
+
 ## textlint
 
-校正
+まず[textlint](https://textlint.github.io)についてお話しします。
+textlintはテキスト向けのLintツールです。
+コマンドラインを通して文章のチェック、校正を行います。
+「ルール」と呼ばれる、文章に対する規則を制限するパッケージを導入し、拡張できます。
 
-https://textlint.github.io
+### ルール
+
+ルールにはたくさんの種類があります。
+例えば`textlint-rule-max-ten`は、一文で利用可能な読点（`、`）の数を制御するのに役立ちます。
+このルールを使うことで、冗長な文章を減らすことが期待できます。
+また、`textlint-rule-no-mix-dearu-desumasu`は文書中の「です・ます」調、「である」調の混在をチェックします。
+
+どのルールを利用するのか迷われた方、いい感じにチェックしてくれるルールを一度に導入したい方は、
+複数のルールをひとまとめにした「ルールプリセット」を使うと良いでしょう。
+私は技術文書を書くためのプリセット、`textlint-rule-preset-ja-technical-writing`を頻繁に利用しています。
 
 ## textlintr
 
-そんなtextlintをRから使えるようにパッケージ化したものが
-textlintrパッケージです。
+そんなtextlintをRから使えるようにパッケージ化したものが[textlintr](https://github.com/uribo/textlintr)パッケージです。
+textlintrでは、RユーザがなれているR Markdownや、新たな文書ファイル形式のQuartoに対応し、簡単に文章校正ができるようにしています。
+R、RStudioから操作を離れることがないので文書執筆に役立ちます。
 
 次のコマンドを実行してインストールを行います。
 
@@ -56,7 +91,7 @@ npm install --save-dev textlint-rule-preset-ja-technical-writing
 ```
 
 `npm install`の実行により、`package.json`、`package-lock.json`の2つのファイル、
-`node_modules/`フォルダが作成されました。
+`node_modules/`フォルダが作成されます。
 この中にインストールしたtextlintおよびルールの実行ファイルが含まれています。
 
 ### textlintrの実行
@@ -64,15 +99,36 @@ npm install --save-dev textlint-rule-preset-ja-technical-writing
 textlintの導入とあわせて技術文書向けのtextlintルールプリセットを入れたので
 すぐにtextlintによる校正を試すことができます。
 
-```{r}
-textlint(file = "draft.qmd")
+`textlint()`関数の引数fileに文章をチェックしたいファイルを文字列で与えて実行します。
 
+```{r}
 textlint(file = "quarto_startup.qmd")
 ```
 
-RStudioマーカーパネルに表示されます。
+textlintrではtextlintによるチェック内容をコンソールまたはRStudioマーカーパネル上に出力します。
+ここではRStudioでの動作を想定して話を進めます。
+
+次の画像はRStudio上で`textlint()`関数の実行結果を表示したものです。
+画面下部の`Markers`パネルにtextlintによるチェックの結果が示されています。
+ここでは確認項目が3つのあることがわかります。
+項目をチェックすると該当の行へとカーソルが移動するため、すぐに文章を手直しできます。
+
+![](screen_shot.png)
+
 
 ### ルールの確認・追加
+
+textlintの豊富なルール、プリセットの追加もRで行えるようになっています。
+`add_rules()`関数に任意のルール、プリセット名を与えて実行するとパッケージがインストールされます。
+
+```{r}
+# common-misspellings （一般的なミススペルを指摘するルール）を追加する
+add_rules(rules = "common-misspellings")
+```
+
+また、ルールに関しての補助関数がいくつか用意されているので簡単に紹介します。
+`configure_lint_rules()`関数はtextlintのオプションを制御する`.textlintrc`ファイルを読み、適用されるルールを確認するのに利用します。
+`is_rule_exist()`関数は、対象のルールが利用可能か調べるのに使います。
 
 ```{r}
 configure_lint_rules()
@@ -80,24 +136,7 @@ configure_lint_rules()
 is_rule_exist("common-misspellings")
 ```
 
-ルールの追加
-
-```{r}
-add_rules(rules = "common-misspellings")
-```
-
-改めて確認
-
-```{r}
-configure_lint_rules()
-```
-
-```{r}
-textlint(file = "wrong.Rmd")
-```
-
-
-> 材料不足で代替素材で製品を作った。
+以上のように、R上でtextlintの実行、環境設定を行えるようになりました。
 
 
 ## textlintrを支えるパッケージ
