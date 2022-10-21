@@ -1,0 +1,9 @@
+---
+title: "Untitled"
+output: html_document
+date: "2022-10-22"
+---
+
+aboutthe RStudio
+
+aready si
