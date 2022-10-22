@@ -36,9 +36,17 @@ eval: false
 
 まず[textlint](https://textlint.github.io)についてお話しします。
 textlintはテキスト向けのLintツールです。
-コマンドラインを通して文章のチェック、校正を行います。
+端末を通して文章のチェック、校正を行います。
 「ルール」と呼ばれる、文章に対する規則を制限するパッケージを導入し、
 文章のチェックに対するルールの拡張を容易にします。
+
+### textlintの使い方
+
+textlint本体やルールはnpmコマンドによりインストールします。
+そのため、動作にはnode.jsのインストールを事前に行う必要があります。
+まず`npm install`でtextlint本体と好みのルールを追加します。
+`npx textlint {対象のファイル名}`の形式で文章をチェックします。
+実際に動作する動画をお見せします。
 
 ![](img/demo_textlint.gif)
 
@@ -55,8 +63,8 @@ textlintはテキスト向けのLintツールです。
 
 ## textlintr
 
-そんなtextlintをRから使えるようにパッケージ化したものが[textlintr](https://github.com/uribo/textlintr)です。
-textlintrでは、RユーザがなれているR Markdownや、新たな文書ファイル形式のQuartoに対応し、簡単に文章校正ができるようにしています。
+そんなtextlintをRユーザーにとって使い勝手が良いようにパッケージ化したものが[textlintr](https://github.com/uribo/textlintr)です。
+textlintrでは、RユーザーがなれているR Markdownや、新たな文書ファイル形式のQuartoに対応し、簡単に文章校正ができるようにしています。
 R、RStudioから操作を離れることがないので文書執筆に役立ちます。
 
 次のコマンドを実行してインストールを行います。
