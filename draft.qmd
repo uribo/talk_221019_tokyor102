@@ -16,7 +16,7 @@ eval: false
 どうもありがとうございます。
 
 今日紹介するtextlintrのほかにも、多くのRパッケージやデータサイエンス関係の資料を作ったり、
-この発表のようにRに関する情報発信を行っています。
+この発表のようにRに関する情報発信をしています。
 一月あたり、およそ牛丼1杯分くらいからの支援を歓迎しています。
 関心のある方はぜひ[紹介文](https://github.com/sponsors/uribo)をご覧ください。
 
@@ -94,7 +94,7 @@ init_textlintr(rules = "textlint-rule-preset-ja-technical-writing")
 関数の実行により、`package.json`、`package-lock.json`、`.textlintrc`の3つのファイル、
 `node_modules/`フォルダが作成されます。
 この中にインストールしたtextlintおよびルールの実行ファイルが含まれています。
-`.textlintrc`はtextlintの実行を制御するルールやプラグインについての記述を行うファイルです。
+`.textlintrc`はtextlintの実行を制御するルールやプラグインについての記述するファイルです。
 
 ### ルールの確認・追加
 
@@ -132,17 +132,17 @@ textlintrではtextlintによるチェック内容をコンソールまたはRSt
 
 次の画像はRStudio上で`textlint()`関数の実行結果を表示したものです。
 画面下部の`Markers`パネルにtextlintによるチェックの結果が示されています。
-ここでは確認項目が3つのあることがわかります。
+ここでは確認項目が3つあることがわかります。
 項目をチェックすると該当の行へとカーソルが移動するため、すぐに文章を手直しできます。
 
 ![](img/screen_shot.png)
 
 以上のように、R上でtextlintの実行、環境設定を行えるようになりました。
 
-私自身もそうですが、RユーザはR MarkdownやQuartoを用いてコードと一緒に文章を書く機会がたくさんあると思います。
+私自身もそうですが、RユーザはR MarkdownやQuartoを用いてコードと一緒に文章を書く機会がたくさんあります。
 一方でコードと文章を同時に書いていると、文章が読みにくいものになりがちです。
 textlintは便利なツールですが、端末での操作が求められます。
-textlintの機能をR、RStudioから直接操作し、素早く修正することが可能なtextlintr、ぜひお試しください。
+textlintの機能をR、RStudioから直接操作し、素早い修正を可能にするtextlintr、ぜひお試しください。
 
 Enjoy!
 
@@ -150,7 +150,7 @@ Enjoy!
 
 ### textlintrを支えるパッケージ
 
-- rstudioapi ... RStudioマーカーパネルへの出力を行う `sourceMarkers()`関数の利用
+- rstudioapi ... RStudioマーカーパネルへ出力する `sourceMarkers()`関数の利用
 - [packer](https://github.com/JohnCoene/packer) ... npmコマンドの実行
 - processx  ... 端末操作のために利用
 - cli, crayon ... 出力の色づけに利用
