@@ -4,3 +4,5 @@
 .Ruserdata
 README.html
 slide.key
+.DS_Store
+node_modules/
