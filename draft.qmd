@@ -16,9 +16,9 @@ eval: false
 どうもありがとうございます。
 
 今日紹介するtextlintrのほかにも、多くのRパッケージやデータサイエンス関係の資料を作ったり、
-この発表のようにRに関する情報発信も行っています。
+この発表のようにRに関する情報発信を行っています。
 一月あたり、およそ牛丼1杯分くらいからの支援を歓迎しています。
-関心のある方はぜひ[紹介文](https://github.com/sponsors/uribo)をご覧になってください。
+関心のある方はぜひ[紹介文](https://github.com/sponsors/uribo)をご覧ください。
 
 ## 要約
 
@@ -37,7 +37,10 @@ eval: false
 まず[textlint](https://textlint.github.io)についてお話しします。
 textlintはテキスト向けのLintツールです。
 コマンドラインを通して文章のチェック、校正を行います。
-「ルール」と呼ばれる、文章に対する規則を制限するパッケージを導入し、拡張できます。
+「ルール」と呼ばれる、文章に対する規則を制限するパッケージを導入し、
+文章のチェックに対するルールの拡張を容易にします。
+
+![](img/demo_textlint.gif)
 
 ### ルール
 
@@ -52,7 +55,7 @@ textlintはテキスト向けのLintツールです。
 
 ## textlintr
 
-そんなtextlintをRから使えるようにパッケージ化したものが[textlintr](https://github.com/uribo/textlintr)パッケージです。
+そんなtextlintをRから使えるようにパッケージ化したものが[textlintr](https://github.com/uribo/textlintr)です。
 textlintrでは、RユーザがなれているR Markdownや、新たな文書ファイル形式のQuartoに対応し、簡単に文章校正ができるようにしています。
 R、RStudioから操作を離れることがないので文書執筆に役立ちます。
 
@@ -62,15 +65,21 @@ R、RStudioから操作を離れることがないので文書執筆に役立ち
 install.packages("textlintr", repos = "https://uribo.r-universe.dev")
 ```
 
-### textlintrでのtextlintの導入
+それではtextlintrの使い方を動画で確認してみましょう。
 
-textlintrはrprojectの内部で利用することを前提としています。
+![](img/textlintr_demo.gif)
+
+後述しますが、最後に実行した`textlint()`関数が文章をチェックする部分です。
+textlintの機能をそのままRで利用可能になっていることがわかります。
+では今見た関数について詳しく解説していきます。
+
+### textlintrでのtextlintの導入
 
 ```{r}
 library(textlintr)
 ```
 
-`init_textlintr()`関数でtextlintのインストールを行います。
+textlintのインストールは`init_textlintr()`関数で行います。
 このとき、校正のルールを追加できます。
 ここでは技術文書向けのtextlintルールプリセット `textlint-rule-preset-ja-technical-writing` を導入する例を示します。
 
@@ -81,23 +90,36 @@ init_textlintr(rules = "textlint-rule-preset-ja-technical-writing")
 #> Yeah! Install was successful
 ```
 
-この関数はtextlintの標準的な導入をRで行えるようにした関数です。
-上記のコマンドで次に示すnpmコマンドの実行します。
-
-```{js}
-npm install --save-dev textlint
-
-npm install --save-dev textlint-rule-preset-ja-technical-writing
-```
-
-`npm install`の実行により、`package.json`、`package-lock.json`の2つのファイル、
+この関数は、`npm install`で行うtextlintの標準的な導入をRで行えるようにした関数です。
+関数の実行により、`package.json`、`package-lock.json`、`.textlintrc`の3つのファイル、
 `node_modules/`フォルダが作成されます。
 この中にインストールしたtextlintおよびルールの実行ファイルが含まれています。
+`.textlintrc`はtextlintの実行を制御するルールやプラグインについての記述を行うファイルです。
+
+### ルールの確認・追加
+
+textlintの豊富なルール、プリセットの追加もRで行えるようになっています。
+`add_rules()`関数に任意のルール、プリセット名を与えて実行するとパッケージがインストールされます。
+
+```{r}
+# common-misspellings （一般的なミススペルを指摘するルール）を追加する
+add_rules(rules = "common-misspellings")
+```
+
+ルールに関して、いくつかの補助関数が存在します。
+`configure_lint_rules()`関数は`.textlintrc`ファイルを読み、適用されるルールを確認するのに利用します。
+`is_rule_exist()`関数は、対象のルールが利用可能か調べるのに使います。
+
+```{r}
+configure_lint_rules()
+
+is_rule_exist("common-misspellings")
+```
 
 ### textlintrの実行
 
-textlintの導入とあわせて技術文書向けのtextlintルールプリセットを入れたので
-すぐにtextlintによる校正を試すことができます。
+技術文書向けのtextlintルールプリセットを入れたので
+textlintによる校正を試すことができます。
 
 `textlint()`関数の引数fileに文章をチェックしたいファイルを文字列で与えて実行します。
 
@@ -115,36 +137,23 @@ textlintrではtextlintによるチェック内容をコンソールまたはRSt
 
 ![](img/screen_shot.png)
 
-
-### ルールの確認・追加
-
-textlintの豊富なルール、プリセットの追加もRで行えるようになっています。
-`add_rules()`関数に任意のルール、プリセット名を与えて実行するとパッケージがインストールされます。
-
-```{r}
-# common-misspellings （一般的なミススペルを指摘するルール）を追加する
-add_rules(rules = "common-misspellings")
-```
-
-また、ルールに関しての補助関数がいくつか用意されているので簡単に紹介します。
-`configure_lint_rules()`関数はtextlintのオプションを制御する`.textlintrc`ファイルを読み、適用されるルールを確認するのに利用します。
-`is_rule_exist()`関数は、対象のルールが利用可能か調べるのに使います。
-
-```{r}
-configure_lint_rules()
-
-is_rule_exist("common-misspellings")
-```
-
 以上のように、R上でtextlintの実行、環境設定を行えるようになりました。
 
+私自身もそうですが、RユーザはR MarkdownやQuartoを用いてコードと一緒に文章を書く機会がたくさんあると思います。
+一方でコードと文章を同時に書いていると、文章が読みにくいものになりがちです。
+textlintは便利なツールですが、端末での操作が求められます。
+textlintの機能をR、RStudioから直接操作し、素早く修正することが可能なtextlintr、ぜひお試しください。
 
-## textlintrを支えるパッケージ
+Enjoy!
 
-- rstudioapi
-- [packer](https://github.com/JohnCoene/packer)
-- processx
-- cli, crayon
+## おまけ
+
+### textlintrを支えるパッケージ
+
+- rstudioapi ... RStudioマーカーパネルへの出力を行う `sourceMarkers()`関数の利用
+- [packer](https://github.com/JohnCoene/packer) ... npmコマンドの実行
+- processx  ... 端末操作のために利用
+- cli, crayon ... 出力の色づけに利用
 
 ## 開発の参考としたパッケージ
 
