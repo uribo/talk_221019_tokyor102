@@ -5,6 +5,11 @@ textlintr: Rユーザのためのtextlintによる校正
 
 ## スライド
 
+Speakerdeck: https://speakerdeck.com/s_uryu/20221022-textlintr
+PDF: [slide.pdf](https://github.com/uribo/talk_221022_tokyor102/blob/main/slide.pdf)
+
+![](img/slide_table.jpg)
+
 ## カラーパレット
 
 ```r
